@@ -60,9 +60,6 @@ plot(markov_chain(:,3))
 title('\beta_2')
 
 %%
-log_like = @(y, sig2) -1/2*sum(log(2*pi)+log(sig2)+(y.^2/sig2.^2));
-
-log_like(0.5128,0.02677)
 
 %https://www.oreilly.com/library/view/machine-learning-for/9781492085249/ch04.html#callout_machine_learning_based___span_class__keep_together__volatility_prediction__span__CO3-5
 %%
@@ -73,7 +70,7 @@ alpha = @(theta) (exp(theta(2))*exp(theta(3)))/(1+exp(theta(2))+exp(theta(3))+ex
 beta = @(theta) (exp(theta(2)))/(1+exp(theta(2))+exp(theta(3))+exp(theta(2))*exp(theta(3)));
 
 % Formula of log-likelihood
-log_like = @(y, sig2) -1/2*sum(log(2*pi)+log(sig2)+(y.^2/sig2.^2));
+log_like = @(y, sig2) -1/2*sum(log(2*pi)+log(sig2)+(y^2/sig2^2));
 
 % Log prior
 gamma_constant = gamma(11.5)/(gamma(1.5)*gamma(10));
@@ -88,8 +85,7 @@ J = @(theta) [exp(theta(1)) 0 0; %row1
     0 (exp(theta(2))+exp(theta(2)+theta(3)))/(1+exp(theta(2))+exp(theta(3))+exp(theta(2)+theta(3)))^2
     -(exp(theta(2))*(exp(theta(3))+exp(theta(2)+theta(3))))/(1+exp(theta(2))+exp(theta(3))+exp(theta(2)+theta(3)))^2];%row3
 
-detJ = @(theta) (exp(theta(1))*(-2*exp(2*theta(2)+2*theta(3))-2*exp(3*theta(2)+2*theta(3))-exp(2*theta(2)+3*theta(3))-exp(3*theta(2)+3*theta(3)) ...
-    -exp(2*theta(2)+theta(3))-exp(3*theta(2)+theta(3))))/(1+exp(theta(2))+exp(theta(3))+exp(theta(2)+theta(3)))^4;
+detJ = @(theta) -((exp(theta(1)+2*theta(2)+theta(3)))/((exp(theta(2)+1))^3)*(exp(theta(3)+1))^2);
 
 % Calculating the kernel: log prior + log likelihood
 llh = log_prior(theta(2), theta(3))+log_like(y, sig2);%+log(detJ(theta));
