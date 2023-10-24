@@ -87,8 +87,10 @@ gamma_constant = gamma(11.5)/(gamma(1.5)*gamma(10));
 log_prior = @(alpha, beta) log(gamma_constant*(alpha^0.5)*((1-alpha)^9)) + log(gamma_constant*(beta^9)*((1-beta)^0.5));
 
 % Jacobian
+numerator = exp(theta(1)+2*theta(2)+theta(3));
+denominator = (exp(theta(2))+1)^3*(exp(theta(3))+1)^2;
 
-detJ = @(theta) -((exp(theta(1)+2*theta(2)+theta(3)))/((exp(theta(2)+1))^3)*(exp(theta(3)+1))^2);
+detJ = @(theta) -numerator/denominator;
 
 % Calculating the kernel: log prior + log likelihood + log detJ
 llh = log_prior(theta(2), theta(3))+log_like(y, sig2)+log(detJ(theta));
