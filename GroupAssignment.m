@@ -21,7 +21,15 @@ n = 1;
 
 while n<Niter
     if n>1
-        sig2(n) = markov_chain(n-1,1) + markov_chain(n-1,2)*y(n-1)^2 + markov_chain(n-1,3)*sig2(n-1);
+        t1 = markov_chain(n-1,1);
+        t2 = markov_chain(n-1,2);
+        t3 = markov_chain(n-1,3);
+
+        omega = exp(t1);
+        alpha = (exp(t2)*exp(t3))/(1+exp(t2)+exp(t3)+exp(t2)*exp(t3));
+        beta = (exp(t2))/(1+exp(t2)+exp(t3)+exp(t2)*exp(t3));
+
+        sig2(n) = omega + markov_chain(n-1,2)*y(n-1)^2 + markov_chain(n-1,3)*sig2(n-1);
     else
         ;
     end
